@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile, socials } from "../data/site";
+
+const experience = [
+  {
+    org: "Nightfall.AI",
+    role: "Engineering — Platform / DLP",
+    period: "Mar 2026 – Present",
+    points: [
+      "Lead the platform powering data-loss prevention across the SaaS apps enterprises run on.",
+      "Scaling the Historical Scan Platform and real-time integration services to billions of records with strong reliability and observability.",
+      "Championing an agentic-AI-driven SDLC — embedding AI assistants across coding, triage, review, deployment, and on-call.",
+    ],
+  },
+  {
+    org: "Observe.AI",
+    role: "SDE I → SDE III",
+    period: "Dec 2020 – Jan 2026",
+    points: [
+      "Re-architected the storage layer for 2B+ interactions onto S3 + Snowflake + Kafka — 95% MongoDB footprint reduction, 30% cost cut, zero-downtime migration.",
+      "Redesigned the Snowflake warehouse strategy with compute/storage tuning and ML-driven autoscaling, saving $800k+ annually as org-wide SME.",
+      "Built a workflow-agnostic reconciliation engine with atomic stage claims, stage-aware retries, and queue replays — turning DLQ-driven recovery into a self-healing system.",
+      "Designed an agentic, multimodal AutoQA platform using planning + execution agents over transcripts, KBs, and screen recordings.",
+      "Re-designed ElasticSearch into a multi-tenant, horizontally scalable cluster — 10× ingestion scale and improved search latency.",
+    ],
+  },
+  {
+    org: "Boeing India",
+    role: "Full Stack Developer",
+    period: "Jun 2018 – Dec 2020",
+    points: [
+      "Modernized legacy monoliths to Angular + scalable backend services adopted across Boeing programs.",
+      "Built CI/CD pipelines with SonarQube & Coverity, raising quality and delivery velocity.",
+    ],
+  },
+  {
+    org: "FeetApart Wellness",
+    role: "Software Engineer",
+    period: "Jul 2017 – Jun 2018",
+    points: [
+      "Built RESTful microservices powering web/mobile wellness apps and automated customer-success workflows.",
+    ],
+  },
+];
+
+const skills = {
+  Languages: "Java, JavaScript, TypeScript, Python, C#",
+  "Data & Storage":
+    "MongoDB, Snowflake, ElasticSearch, S3, Redis, MySQL, SQL Server, Neo4j",
+  "Tools & Infra": "AWS, Kafka, Kong, Looker, Hevodata, n8n, Git, Cursor",
+};
+---
+
+<BaseLayout title="About" description="Background, experience, and what I work on.">
+  <h1>About</h1>
+  {profile.intro.map((para) => <p>{para}</p>)}
+
+  <div class="socials">
+    {socials.map((s) => <a href={s.href} rel="me">{s.label}</a>)}
+  </div>
+
+  <h2>Experience</h2>
+  <ul class="entries">
+    {
+      experience.map((e) => (
+        <li>
+          <h3>{e.org}</h3>
+          <span class="meta">{e.role} · {e.period}</span>
+          <ul>
+            {e.points.map((p) => <li class="blurb">{p}</li>)}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Skills</h2>
+  <ul class="entries">
+    {
+      Object.entries(skills).map(([k, v]) => (
+        <li>
+          <h3>{k}</h3>
+          <p class="blurb">{v}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Education</h2>
+  <ul class="entries">
+    <li>
+      <h3>NIT Surat</h3>
+      <p class="blurb">B.Tech, Electrical Engineering</p>
+      <span class="meta">2013 – 2017</span>
+    </li>
+  </ul>
+</BaseLayout>

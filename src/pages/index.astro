@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { profile, socials, writing } from "../data/site";
+
+const dateFmt = (d: string | Date) =>
+  new Date(d).toLocaleDateString("en-US", { year: "numeric", month: "long" });
+
+const thoughts = (await getCollection("thoughts"))
+  .filter((t) => !t.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const writingSorted = [...writing].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BaseLayout>
+  <header>
+    <h1>{profile.name}</h1>
+    <p class="role-line">{profile.role}</p>
+    <p class="tagline">{profile.tagline}</p>
+  </header>
+
+  {profile.intro.map((para) => <p>{para}</p>)}
+
+  <div class="socials">
+    {socials.map((s) => <a href={s.href} rel="me">{s.label}</a>)}
+  </div>
+
+  <h2>Writing</h2>
+  <ul class="entries">
+    {
+      writingSorted.map((w) => (
+        <li>
+          <h3>
+            <a href={w.href} target="_blank" rel="noopener">
+              {w.title}
+            </a>
+          </h3>
+          <p class="blurb">{w.blurb}</p>
+          <span class="meta">
+            {w.venue} · {dateFmt(w.date)}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Thoughts</h2>
+  <ul class="entries">
+    {
+      thoughts.map((t) => (
+        <li>
+          <h3>
+            <a href={`/thoughts/${t.id}`}>{t.data.title}</a>
+          </h3>
+          {t.data.description && <p class="blurb">{t.data.description}</p>}
+          <span class="meta">{dateFmt(t.data.date)}</span>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

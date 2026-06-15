@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const dateFmt = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+const thoughts = (await getCollection("thoughts"))
+  .filter((t) => !t.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Thoughts" description="Notes and takes on engineering, AI, and craft.">
+  <h1>Thoughts</h1>
+  <p class="tagline">
+    Short notes and takes — mostly on building systems, AI in the dev loop, and
+    the craft of engineering.
+  </p>
+
+  <ul class="entries">
+    {
+      thoughts.map((t) => (
+        <li>
+          <h3>
+            <a href={`/thoughts/${t.id}`}>{t.data.title}</a>
+          </h3>
+          {t.data.description && <p class="blurb">{t.data.description}</p>}
+          <span class="meta">{dateFmt(t.data.date)}</span>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
